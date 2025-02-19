@@ -2,7 +2,7 @@
 
 This project aims to study React technologies with the NextJS framework for frontend development and NodeJS with the NestJS framework for backend development.
 
-The Neon PostgreSQL Platform offers a serverless Postgres database for developers. To use it, go to the <a href="https://neon.tech/" target="blank">Neon</a> website, create an account, set up a cluster, create a user and set the DATABASE_URL environment variable in the .env file.
+The CockroachDB serverless database will be used in this project. To use it, go to the <a href="https://www.cockroachlabs.com/" target="blank">CockroachDB</a> website, create an account, set up a cluster, create a user and set the DATABASE_URL environment variable in the .env file.
 
 ## Technologies
 
@@ -12,7 +12,7 @@ A progressive Node.js framework for building efficient, reliable and scalable se
 ### Prisma ORM
 Next-generation Node.js and TypeScript ORM
 
-### Postgres database
+### Cockroach database
 A distributed SQL database designed for speed, scale and survival.
 
 ## Installation
