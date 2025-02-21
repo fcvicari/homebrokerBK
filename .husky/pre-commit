@@ -1,2 +1,2 @@
-yarn lint-staged
-yarn test:cov
+yarn lint-staged || exit 1
+yarn test:cov || exit 1
