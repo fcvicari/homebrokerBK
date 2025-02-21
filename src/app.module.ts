@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { PrismaService } from './database/prisma.service';
-import { UserController } from './users/user/user.controller';
-import { UserRepository } from './users/user/user.repository';
-import { UserTokenRepository } from './users/usertoken/userToken.repository';
-import { PasswordHash } from './utils/password.hash';
+import { PrismaService } from '@src/database/prisma.service';
+import { UsersModule } from '@src/users/users.module';
 
 @Module({
   imports: [
@@ -12,9 +9,9 @@ import { PasswordHash } from './utils/password.hash';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '12h' },
     }),
+    UsersModule
   ],
-  controllers: [UserController],
-  providers: [PasswordHash, PrismaService, UserRepository, UserTokenRepository],
+  providers: [PrismaService]
 })
 
 export class AppModule { }
