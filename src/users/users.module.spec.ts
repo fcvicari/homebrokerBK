@@ -1,11 +1,13 @@
 import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '@src/database/prisma.service';
+import { UserController } from '@src/users/user/user.controller';
+import { UserRepository } from '@src/users/user/user.repository';
+import { UsersModule } from '@src/users/users.module';
+import { UserTokenRepository } from '@src/users/usertoken/userToken.repository';
 import { PasswordHash } from '@src/utils/password.hash';
-import { UserController } from './user/user.controller';
-import { UserRepository } from './user/user.repository';
-import { UsersModule } from './users.module';
-import { UserTokenRepository } from './usertoken/userToken.repository';
+import { SingInController } from './singin/singin.controller';
+import { SingupController } from './singup/singup.controller';
 
 describe('UsersModule Test', () => {
   let moduleRef: TestingModule;
@@ -29,6 +31,16 @@ describe('UsersModule Test', () => {
   it('should register UserController controller', () => {
     const userController = moduleRef.get<UserController>(UserController);
     expect(userController).toBeDefined();
+  });
+
+  it('should register SingInController controller', () => {
+    const singincontroller = moduleRef.get<SingInController>(SingInController);
+    expect(singincontroller).toBeDefined();
+  });
+
+  it('should register SingUpController controller', () => {
+    const singupcontroller = moduleRef.get<SingupController>(SingupController);
+    expect(singupcontroller).toBeDefined();
   });
 
   it('should register PrismaService provider', () => {
