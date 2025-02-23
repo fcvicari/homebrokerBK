@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from '@src/database/prisma.service';
 import { UsersModule } from '@src/users/users.module';
+import { WalletsModule } from '@src/wallets/wallets.module';
 
 @Module({
   imports: [
@@ -9,7 +10,8 @@ import { UsersModule } from '@src/users/users.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '12h' },
     }),
-    UsersModule
+    UsersModule,
+    WalletsModule
   ],
   providers: [PrismaService]
 })

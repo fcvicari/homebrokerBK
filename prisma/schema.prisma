@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "cockroachdb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -23,6 +23,7 @@ model Users {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   UsersToken UsersToken[]
+  Wallet     Wallet[]
 
   @@unique([email])
 }
@@ -31,6 +32,21 @@ model UsersToken {
   id        String   @id @default(cuid())
   user      Users    @relation(fields: [userID], references: [id])
   userID    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  name      String
+  user      Users    @relation(fields: [userID], references: [id])
+  userID    String
+  /// Current total balance
+  balance   Float    @default(0)
+  /// Total amount invested
+  amount    Float    @default(0)
+  /// Total amount of dividends received
+  dividends Float    @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

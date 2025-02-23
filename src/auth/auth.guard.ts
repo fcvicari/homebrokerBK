@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate {
       throw new AppError(UnauthorizedUser, 401);
     }
 
-    request['user'] = payload;
+    request['user'] = { ...existsUser, password: undefined };
     return true;
   }
 

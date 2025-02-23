@@ -2,7 +2,7 @@
 
 This project aims to study React technologies with the NextJS framework for frontend development and NodeJS with the NestJS framework for backend development.
 
-The CockroachDB serverless database will be used in this project. To use it, go to the <a href="https://www.cockroachlabs.com/" target="blank">CockroachDB</a> website, create an account, set up a cluster, create a user and set the DATABASE_URL environment variable in the .env file.
+The PostgreSQL serverless database will be used in this project. To use it, go to the <a href="https://www.render.com/" target="blank">Render</a> website, create an account, set up a cluster, create a user and set the DATABASE_URL environment variable in the .env file.
 
 ## Technologies
 
@@ -12,7 +12,7 @@ A progressive Node.js framework for building efficient, reliable and scalable se
 ### Prisma ORM
 Next-generation Node.js and TypeScript ORM
 
-### Cockroach database
+### PostgreSQL database
 A distributed SQL database designed for speed, scale and survival.
 
 ## Installation
