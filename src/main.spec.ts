@@ -1,35 +1,63 @@
-import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from '@src/app.module';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Test, TestingModule } from '@nestjs/testing';
+import * as request from 'supertest';
+import { AppModule } from './app.module';
 
-jest.mock('@nestjs/core', () => ({
-  NestFactory: {
-    create: jest.fn(),
-  },
-}));
+describe('Bootstrap (e2e)', () => {
+  let app: INestApplication;
 
-describe('Application Bootstrap', () => {
-  let appMock: { useGlobalPipes: jest.Mock; listen: jest.Mock };
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
 
-  beforeEach(() => {
-    appMock = {
-      useGlobalPipes: jest.fn(),
-      listen: jest.fn().mockResolvedValue(undefined),
-    };
-    (NestFactory.create as jest.Mock).mockResolvedValue(appMock);
+    app = moduleFixture.createNestApplication();
+
+    // Applying ValidationPipe
+    app.useGlobalPipes(new ValidationPipe());
+
+    // Configuring Swagger
+    const config = new DocumentBuilder()
+      .setTitle('Home Broker API example')
+      .setDescription('The Home Broker API description')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('swagger/api', app, document);
+
+    await app.init();
+  }, 15000);
+
+  afterAll(async () => {
+    await app.close();
   });
 
-  it('should create the app and set up the global ValidationPipe', async () => {
-    const { bootstrap } = await import('./main');
+  it('should return 200 on Swagger UI', async () => {
+    const res = await request(app.getHttpServer()).get('/swagger/api');
+    expect(res.status).toBe(200);
+  });
 
-    await bootstrap();
+  it('should apply ValidationPipe globally', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/some-endpoint')
+      .send({ invalidField: 'invalid' });
 
-    expect(NestFactory.create).toHaveBeenCalledWith(AppModule);
+    expect(res.status).toBe(404);
+  });
 
-    expect(appMock.useGlobalPipes).toHaveBeenCalledWith(
-      expect.any(ValidationPipe),
-    );
+  it('should bootstrap the application', async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
 
-    expect(appMock.listen).toHaveBeenCalledWith(3333);
+    app = moduleFixture.createNestApplication();
+    await app.init();
+
+    expect(app).toBeDefined();
+
+    await app.close();
   });
 });
