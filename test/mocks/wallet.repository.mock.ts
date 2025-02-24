@@ -34,7 +34,7 @@ export const walletMock = [
   },
 ] as Wallet[];
 
-export const walletServiceMock = {
+export const walletRepositoryMock = {
   provide: WalletRepository,
   useValue: {
     create: jest

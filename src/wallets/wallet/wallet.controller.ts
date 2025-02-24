@@ -13,10 +13,10 @@ export class WalletController {
 
   @Post()
   async post(@Body() body: WalletDTO, @Request() req) {
-    const { walletname } = body;
+    const { name } = body;
 
     const wallet = await this.wallet.create({
-      name: walletname,
+      name,
       balance: 0,
       amount: 0,
       dividends: 0,

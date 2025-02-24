@@ -24,7 +24,7 @@ export const userMock = [
   },
 ] as Users[];
 
-export const userServiceMock = {
+export const userRepositoryMock = {
   provide: UserRepository,
   useValue: {
     create: jest
