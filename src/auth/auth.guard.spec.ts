@@ -2,7 +2,7 @@ import { ExecutionContext } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '@src/database/prisma.service';
-import { userServiceMock } from '../../test/mocks/user.repository.mock';
+import { userRepositoryMock } from '../../test/mocks/user.repository.mock';
 import { AuthGuard } from './auth.guard';
 
 describe('AuthGuard Tests', () => {
@@ -14,7 +14,7 @@ describe('AuthGuard Tests', () => {
       providers: [
         AuthGuard,
         JwtService,
-        userServiceMock,
+        userRepositoryMock,
         {
           provide: PrismaService,
           useValue: {

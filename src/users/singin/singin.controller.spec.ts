@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '@src/database/prisma.service';
 import { jwtServiceMock } from '../../../test/mocks/jwtService.mock';
 import { passwordHashMock } from '../../../test/mocks/password.hash.mock';
-import { userMock, userServiceMock } from '../../../test/mocks/user.repository.mock';
+import { userMock, userRepositoryMock } from '../../../test/mocks/user.repository.mock';
 import { SingInController } from './singin.controller';
 
 describe('SinginController Tests', () => {
@@ -14,7 +14,7 @@ describe('SinginController Tests', () => {
       providers: [
         jwtServiceMock,
         passwordHashMock,
-        userServiceMock,
+        userRepositoryMock,
         {
           provide: PrismaService,
           useValue: {

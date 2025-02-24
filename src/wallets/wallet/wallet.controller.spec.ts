@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { jwtServiceMock } from '../../../test/mocks/jwtService.mock';
 import { passwordHashMock } from '../../../test/mocks/password.hash.mock';
-import { userServiceMock } from '../../../test/mocks/user.repository.mock';
-import { walletServiceMock } from '../../../test/mocks/wallet.repository.mock';
+import { userRepositoryMock } from '../../../test/mocks/user.repository.mock';
+import { walletRepositoryMock } from '../../../test/mocks/wallet.repository.mock';
 import { WalletController } from './wallet.controller';
 
 describe('WalletController Tests', () => {
@@ -13,9 +13,9 @@ describe('WalletController Tests', () => {
       controllers: [WalletController],
       providers: [
         passwordHashMock,
-        userServiceMock,
+        userRepositoryMock,
         jwtServiceMock,
-        walletServiceMock
+        walletRepositoryMock
       ],
     }).compile();
 
@@ -29,7 +29,7 @@ describe('WalletController Tests', () => {
   it('Create wallet - success', async () => {
     const wallet = await walletController.post(
       {
-        walletname: 'walletname',
+        name: 'walletname',
       },
       {
         user: {
@@ -74,5 +74,4 @@ describe('WalletController Tests', () => {
   it('Delete wallet - success', async () => {
     expect(await walletController.delete('1')).toEqual(true);
   });
-
 });

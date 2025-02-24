@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { jwtServiceMock } from '../../../test/mocks/jwtService.mock';
 import { passwordHashMock } from '../../../test/mocks/password.hash.mock';
-import { userServiceMock } from '../../../test/mocks/user.repository.mock';
-import { userTokenServiceMock } from '../../../test/mocks/userToken.repository.mock';
+import { userRepositoryMock } from '../../../test/mocks/user.repository.mock';
+import { userTokenRepositoryMock } from '../../../test/mocks/userToken.repository.mock';
 import { UserController } from './user.controller';
 
 describe('UserController Tests', () => {
@@ -13,8 +13,8 @@ describe('UserController Tests', () => {
       controllers: [UserController],
       providers: [
         passwordHashMock,
-        userServiceMock,
-        userTokenServiceMock,
+        userRepositoryMock,
+        userTokenRepositoryMock,
         jwtServiceMock,
       ],
     }).compile();
