@@ -63,6 +63,17 @@ describe('UserController Tests', () => {
     expect(updateUser?.email).toEqual(body.email);
   });
 
+  it('Update user - success', async () => {
+    const body = {
+      email: 'jonhdoe@jonhdoe.com',
+      name: 'Jonh Doe Update',
+    };
+
+    const updateUser = await userController.update(body, '1');
+
+    expect(updateUser?.email).toEqual(body.email);
+  });
+
   it('Change password user - user does not exist', async () => {
     const body = {
       password: '12345',
