@@ -6,6 +6,7 @@ import { AssetsDTO } from './asset.Dto';
 import { AssetRepository } from './asset.repository';
 
 @ApiTags('Assets')
+@ApiBearerAuth('jwt')
 @Controller('assets')
 @UseGuards(AuthGuard)
 export class AssetController {
@@ -14,7 +15,6 @@ export class AssetController {
   ) { }
 
   @ApiOperation({ summary: 'Create or update an asset' })
-  @ApiBearerAuth('jwt')
   @ApiResponse({
     status: 201,
     description: 'Asset successfully created or updated.',
@@ -55,7 +55,6 @@ export class AssetController {
   }
 
   @ApiOperation({ summary: 'Get asset by symbol' })
-  @ApiBearerAuth('jwt')
   @ApiResponse({
     status: 200,
     description: 'Asset found.',
@@ -79,7 +78,6 @@ export class AssetController {
   }
 
   @ApiOperation({ summary: 'Delete asset by ID' })
-  @ApiBearerAuth('jwt')
   @ApiResponse({
     status: 200,
     description: 'Asset successfully deleted.',
