@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppError } from '@src/utils/app.erro';
 import { PasswordHash } from '@src/utils/password.hash';
 import { UserRepository } from '../user/user.repository';
@@ -9,6 +10,7 @@ const UnauthorizedUser = 'Unauthorized user.';
 const AccountInactive =
   UnauthorizedUser + ' Your account is currently inactive.';
 
+@ApiTags('Authentication')
 @Controller('singin')
 export class SingInController {
   constructor(
@@ -19,6 +21,30 @@ export class SingInController {
     private jwtService: JwtService,
   ) { }
 
+  @ApiOperation({ summary: 'User Sign-In', description: 'Authenticate user and return JWT token.' })
+  @ApiBody({ type: SingInDTO })
+  @ApiResponse({
+    status: 201,
+    description: 'User authenticated successfully.',
+    schema: {
+      example: {
+        id: '12345',
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized user or inactive account.',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Unauthorized user.',
+      },
+    },
+  })
   @Post()
   async postSingIn(@Body() body: SingInDTO) {
     const { email, password } = body;

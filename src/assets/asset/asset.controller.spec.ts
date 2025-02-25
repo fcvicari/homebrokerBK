@@ -91,15 +91,15 @@ describe('AssetController Tests', () => {
   });
 
   it('Get asset by invalid Symbol', async () => {
-    const asset = await assetController.getBySymbol('INVALID');
-
-    expect(asset).toBeUndefined();
+    await expect(
+      assetController.getBySymbol('INVALID'),
+    ).rejects.toHaveProperty('statusCode', 404);
   });
 
   it('Delete asset - id does not exist', async () => {
     await expect(
       assetController.delete('idNotExists'),
-    ).rejects.toHaveProperty('statusCode', 400);
+    ).rejects.toHaveProperty('statusCode', 404);
   });
 
   it('Delete asset - success', async () => {

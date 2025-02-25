@@ -1,11 +1,14 @@
 import { Body, Controller, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDTO } from '@src/users/user/user.Dto';
 import { UserRepository } from '@src/users/user/user.repository';
 import { UserTokenRepository } from '@src/users/usertoken/userToken.repository';
 import { AppError } from '@src/utils/app.erro';
 import { PasswordHash } from '@src/utils/password.hash';
 import { differenceInHours } from 'date-fns';
+import { AlterPasswordDTO, RecoveryPasswordDTO } from './singup.Dto';
 
+@ApiTags('Users')
 @Controller()
 export class SingupController {
   constructor(
@@ -16,6 +19,20 @@ export class SingupController {
     private userToken: UserTokenRepository,
   ) { }
 
+  @ApiOperation({ summary: 'Creates a new user account', description: 'Creates a new user account with an inactive status and generates an activation token.' })
+  @ApiResponse({
+    status: 201, description: 'User created successfully.', example: {
+      id: "cm7jt1aqo0000vllsz5mdp9c0",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      avatar: "https://example.com/avatar.jpg",
+      active: false,
+      createdAt: "2025-02-25T01:25:13.248Z",
+      updatedAt: "2025-02-25T01:25:13.248Z",
+      activeToken: "cm7jt1b280001vllsgernk65f",
+    }
+  })
+  @ApiResponse({ status: 400, description: 'This email is already used by another user.' })
   @Post('singup')
   async postNewUser(@Body() body: UserDTO) {
     const { email, name, password, avatar } = body;
@@ -35,16 +52,34 @@ export class SingupController {
       active: false,
     });
 
-    await this.userToken.create({
+    const token = await this.userToken.create({
       user: { connect: userCreated },
     });
 
     return {
       ...userCreated,
       password: undefined,
+      activeToken: token.id,
     };
   }
 
+  @ApiOperation({
+    summary: 'Activate a user account',
+    description: 'This API endpoint is used to activate a user account using an activation token. It validates the token, checks its expiration (valid for 2 hours), activates the user account if valid, and removes all related activation tokens after successful activation.'
+  })
+  @ApiQuery({ name: 'token', required: true })
+  @ApiResponse({
+    status: 201, description: 'User activate successfully.', example: {
+      id: "cm7jt1aqo0000vllsz5mdp9c0",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      avatar: "https://example.com/avatar.jpg",
+      active: true,
+      createdAt: "2025-02-25T01:25:13.248Z",
+      updatedAt: "2025-02-25T01:25:13.248Z",
+    }
+  })
+  @ApiResponse({ status: 400, description: 'Token expired.' })
   @Post('activate')
   async postActivateUser(@Query() query) {
     const { token } = query;
@@ -67,8 +102,25 @@ export class SingupController {
     return null;
   }
 
+  @ApiOperation({
+    summary: 'Reset password',
+    description: "This API endpoint allows users to reset their password using a valid token. It validates the token, ensures it hasn't expired(valid for 2 hours), securely hashes the new password, updates the user's password, and deletes all related tokens after a successful update."
+  })
+  @ApiQuery({ name: 'token', required: true })
+  @ApiResponse({
+    status: 201, description: 'User activate successfully.', example: {
+      id: "cm7jt1aqo0000vllsz5mdp9c0",
+      name: "John Doe",
+      email: "johndoe@example.com",
+      avatar: "https://example.com/avatar.jpg",
+      active: true,
+      createdAt: "2025-02-25T01:25:13.248Z",
+      updatedAt: "2025-02-25T01:25:13.248Z",
+    }
+  })
+  @ApiResponse({ status: 400, description: 'Token expired.' })
   @Post('alterpass')
-  async postAlterPassword(@Body() body, @Query() query) {
+  async postAlterPassword(@Body() body: AlterPasswordDTO, @Query() query) {
     const { token } = query;
     const { password } = body;
 
@@ -92,8 +144,17 @@ export class SingupController {
     return null;
   }
 
+  @ApiOperation({
+    summary: 'Password recovery process',
+    description: "This API initiates the password recovery process. It checks if the provided email belongs to a registered user, generates a password reset token, deletes any existing tokens for security, and (optionally) sends a recovery email containing the new token."
+  })
+  @ApiResponse({
+    status: 201, description: 'Token alter password send.', example: {
+      token: "cm7jt1aqo0000vllsz5mdp9c0",
+    }
+  })
   @Post('recoverpass')
-  async postRecoverPassword(@Body() body) {
+  async postRecoverPassword(@Body() body: RecoveryPasswordDTO) {
     const { email } = body;
 
     const userExists = await this.user.findByEmail({ email });
@@ -102,14 +163,14 @@ export class SingupController {
         userID: userExists.id,
       });
 
-      await this.userToken.create({
+      const userToken = await this.userToken.create({
         user: {
           connect: userExists,
         },
       });
 
       //sendEmailActivate(userToken.id);
-      return true;
+      return { token: userToken.id };
     }
 
     return null;

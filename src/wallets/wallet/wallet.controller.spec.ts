@@ -68,7 +68,7 @@ describe('WalletController Tests', () => {
   it('Delete wallet - id does not exist', async () => {
     await expect(
       walletController.delete('idNotExists'),
-    ).rejects.toHaveProperty('statusCode', 400);
+    ).rejects.toHaveProperty('statusCode', 404);
   });
 
   it('Delete wallet - success', async () => {
