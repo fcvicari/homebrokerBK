@@ -15,6 +15,9 @@ Next-generation Node.js and TypeScript ORM
 ### PostgreSQL database
 A distributed SQL database designed for speed, scale and survival.
 
+### OpenAPI (Swagger)
+OpenAPI (formerly Swagger) is a standard specification for defining RESTful APIs, enabling clear, language-agnostic documentation. It simplifies API development, testing, and integration by providing a structured format (YAML or JSON). Tools like Swagger UI and Codegen enhance visualization and code generation.
+
 ## Installation
 To install the application, you must configure the DATABASE_URL environment variable. This variable must contain the address of the application database.
 This application is configured to use the database in Cockroach. If you want to change, you must reconfigure the prisma ORM.
