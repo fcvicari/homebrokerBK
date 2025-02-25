@@ -19,7 +19,7 @@ export class SingupController {
     private userToken: UserTokenRepository,
   ) { }
 
-  @ApiOperation({ summary: 'Creates a new user account with an inactive status and generates an activation token.' })
+  @ApiOperation({ summary: 'Creates a new user account', description: 'Creates a new user account with an inactive status and generates an activation token.' })
   @ApiResponse({
     status: 201, description: 'User created successfully.', example: {
       id: "cm7jt1aqo0000vllsz5mdp9c0",
@@ -64,7 +64,8 @@ export class SingupController {
   }
 
   @ApiOperation({
-    summary: 'This API endpoint is used to activate a user account using an activation token. It validates the token, checks its expiration (valid for 2 hours), activates the user account if valid, and removes all related activation tokens after successful activation.'
+    summary: 'Activate a user account',
+    description: 'This API endpoint is used to activate a user account using an activation token. It validates the token, checks its expiration (valid for 2 hours), activates the user account if valid, and removes all related activation tokens after successful activation.'
   })
   @ApiQuery({ name: 'token', required: true })
   @ApiResponse({
@@ -102,7 +103,8 @@ export class SingupController {
   }
 
   @ApiOperation({
-    summary: "This API endpoint allows users to reset their password using a valid token. It validates the token, ensures it hasn't expired(valid for 2 hours), securely hashes the new password, updates the user's password, and deletes all related tokens after a successful update."
+    summary: 'Reset password',
+    description: "This API endpoint allows users to reset their password using a valid token. It validates the token, ensures it hasn't expired(valid for 2 hours), securely hashes the new password, updates the user's password, and deletes all related tokens after a successful update."
   })
   @ApiQuery({ name: 'token', required: true })
   @ApiResponse({
@@ -143,7 +145,8 @@ export class SingupController {
   }
 
   @ApiOperation({
-    summary: "This API initiates the password recovery process. It checks if the provided email belongs to a registered user, generates a password reset token, deletes any existing tokens for security, and (optionally) sends a recovery email containing the new token."
+    summary: 'Password recovery process',
+    description: "This API initiates the password recovery process. It checks if the provided email belongs to a registered user, generates a password reset token, deletes any existing tokens for security, and (optionally) sends a recovery email containing the new token."
   })
   @ApiResponse({
     status: 201, description: 'Token alter password send.', example: {

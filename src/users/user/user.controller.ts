@@ -1,8 +1,9 @@
 import { Body, Controller, Delete, Param, Patch, Put, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@src/auth/auth.guard';
 import { AppError } from '@src/utils/app.erro';
 import { PasswordHash } from '@src/utils/password.hash';
-import { UserPasswordDTO } from './password.Dto';
+import { UserPasswordDTO } from './user.password.Dto';
 import { UserRepository } from './user.repository';
 import { UserDataDTO } from './userData.Dto';
 
@@ -21,6 +22,42 @@ export class UserController {
     private hash: PasswordHash,
   ) { }
 
+  @ApiBearerAuth('jwt')
+  @ApiParam({ name: 'id', type: String, description: 'Unique user identifier' })
+  @ApiOperation({ summary: 'Update User Profile', description: 'Allow users to update their profile information such as email, name, and avatar.' })
+  @ApiResponse({
+    status: 200,
+    description: 'User updated successfully.',
+    schema: {
+      example: {
+        id: '12345',
+        name: 'John Doe',
+        email: 'newemail@example.com',
+        avatar: 'https://new-avatar-url.com/avatar.png',
+        updatedAt: '2025-02-25T15:30:00.000Z',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'User not found.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'User not found.',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'User inactive.',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'User inactive.',
+      },
+    },
+  })
   @Patch(':id')
   async update(@Body() body: UserDataDTO, @Param('id') id: string) {
     const { email, name, avatar } = body;
@@ -50,6 +87,41 @@ export class UserController {
     };
   }
 
+  @ApiBearerAuth('jwt')
+  @ApiOperation({ summary: 'Change User Password', description: 'Allow users to change their password by providing the current and new password.' })
+  @ApiParam({ name: 'id', type: String, description: 'Unique user identifier' })
+  @ApiResponse({
+    status: 200,
+    description: 'Password Changed Successfully',
+    schema: {
+      example: {
+        id: "12345",
+        name: "John Doe",
+        email: "johndoe@example.com",
+        updatedAt: "2025-02-25T15:30:00.000Z"
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'User not found.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'User not found.',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'User inactive or invalid current password.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'Inactive user',
+      },
+    },
+  })
   @Put(':id')
   async changePassword(
     @Body() body: UserPasswordDTO,
@@ -92,6 +164,25 @@ export class UserController {
     };
   }
 
+  @ApiBearerAuth('jwt')
+  @ApiOperation({
+    summary: 'Delete user',
+    description: "This endpoint allows you to delete a user by their unique id. It first checks if the user exists, and if so, deletes the user. If the user does not exist, it returns an error."
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User deleted successfully.'
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'User not found.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'User not found.',
+      },
+    },
+  })
   @Delete(':id')
   async delete(@Param('id') id: string) {
     const userExists = await this.user.getUniqueById({ id });

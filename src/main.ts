@@ -14,7 +14,14 @@ export async function bootstrap() {
     .setTitle('Home Broker API example')
     .setDescription('The Home Broker API description')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'jwt',
+    )
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger/api', app, documentFactory);
