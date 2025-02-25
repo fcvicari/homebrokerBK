@@ -120,7 +120,7 @@ describe('SingupController Tests', () => {
 
       const result = await singupController.postRecoverPassword(body);
 
-      await expect(result).toEqual(true);
+      await expect(result?.token).toEqual('userTokenMockID1');
     });
   });
 });
