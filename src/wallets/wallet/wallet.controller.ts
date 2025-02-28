@@ -62,16 +62,42 @@ export class WalletController {
   @ApiResponse({
     status: 200,
     description: 'Wallet deleted successfully.',
+    schema: {
+      example: {
+        statusCode: 200,
+        message: 'Wallet deleted successfully.',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'You do not have permission to access this wallet.',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'You do not have permission to access this wallet.',
+      },
+    },
   })
   @ApiResponse({
     status: 404,
     description: 'Wallet not found.',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'Wallet not found.',
+      },
+    },
   })
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: string, @Request() req) {
     const wallet = await this.wallet.getUniqueById({ id });
     if (!wallet) {
       throw new AppError('Wallet not found.', 404);
+    }
+
+    if (wallet.userID !== req.user.Id) {
+      throw new AppError('You do not have permission to access this wallet.', 401);
     }
 
     await this.wallet.delete({
