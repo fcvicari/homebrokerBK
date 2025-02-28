@@ -24,6 +24,7 @@ model Users {
   updatedAt  DateTime     @updatedAt
   UsersToken UsersToken[]
   Wallet     Wallet[]
+  Order      Order[]
 
   @@unique([email])
 }
@@ -49,6 +50,7 @@ model Wallet {
   dividends Float    @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Order     Order[]
 }
 
 model Assets {
@@ -61,4 +63,33 @@ model Assets {
   updatedAt DateTime @updatedAt
 
   @@unique([symbol])
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  orderNumber String      @unique
+  asset       String
+  price       Float
+  quantity    Int
+  userId      String
+  walletId    String
+  status      OrderStatus
+  orderType   OrderType
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user   Users  @relation(fields: [userId], references: [id])
+  wallet Wallet @relation(fields: [walletId], references: [id])
+}
+
+enum OrderStatus {
+  OPEN
+  PARTIALLY_EXECUTED
+  EXECUTED
+  CANCELED
+}
+
+enum OrderType {
+  BUY
+  SELL
 }
