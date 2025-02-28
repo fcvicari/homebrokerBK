@@ -66,17 +66,19 @@ model Assets {
 }
 
 model Order {
-  id          String      @id @default(uuid())
-  orderNumber String      @unique
-  asset       String
-  price       Float
-  quantity    Int
-  userId      String
-  walletId    String
-  status      OrderStatus
-  orderType   OrderType
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id            String      @id @default(uuid())
+  orderNumber   String      @unique
+  asset         String
+  priceExec     Float
+  quantityExec  Float
+  userId        String
+  walletId      String
+  status        OrderStatus
+  orderType     OrderType
+  priceOrder    Float
+  quantityOrder Float
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   user   Users  @relation(fields: [userId], references: [id])
   wallet Wallet @relation(fields: [walletId], references: [id])
