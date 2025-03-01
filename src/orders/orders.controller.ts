@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrderStatus } from '@prisma/client';
 import { AssetRepository } from '@src/assets/asset/asset.repository';
@@ -79,6 +79,30 @@ export class OrdersController {
     const newOrder = await this.order.create(order);
 
     return newOrder
+  }
+
+  @Delete(':id')
+  async deleteOrder(@Param('id') id: string, @Request() req) {
+    if (!id) {
+      throw new AppError('ID is required and must be provided.', 400);
+    }
+
+    const order = await this.order.findById(id);
+    if (!order) {
+      throw new AppError('Order not found.', 404);
+    }
+
+    if (order.userId !== req.user.id) {
+      throw new AppError('You do not have permission to access this order.', 401);
+    }
+
+    if (order.status === OrderStatus.EXECUTED) {
+      throw new AppError('Order has already been executed.', 401);
+    }
+
+    const orderCancel = await this.order.cancelOrder(id);
+
+    return orderCancel
   }
 
 }

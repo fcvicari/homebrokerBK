@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrderType } from '@prisma/client';
+import { OrderStatus, OrderType } from '@prisma/client';
 import { assetRepositoryMock } from '../../test/mocks/asset.repository.mock';
 import { jwtServiceMock } from '../../test/mocks/jwtService.mock';
 import { orderRepositoryMock } from '../../test/mocks/order.repository.mock';
@@ -8,7 +8,7 @@ import { userRepositoryMock } from '../../test/mocks/user.repository.mock';
 import { walletRepositoryMock } from '../../test/mocks/wallet.repository.mock';
 import { OrdersController } from './orders.controller';
 
-describe('AssetController Tests', () => {
+describe('OrderController Tests', () => {
   let controller: OrdersController;
 
   beforeAll(async () => {
@@ -71,6 +71,7 @@ describe('AssetController Tests', () => {
         price: 12.67,
       }
 
+
       const req = { user: { id: '1' } }
 
       await expect(controller.createOrder(body, req)).rejects.toHaveProperty('statusCode', 404);
@@ -90,9 +91,46 @@ describe('AssetController Tests', () => {
 
       const order = await controller.createOrder(body, req);
 
-      await expect(order.id).not.toBeNull();
+      expect(order.id).not.toBeNull();
+    });
+  });
+
+  describe('Cancel order', () => {
+    test('Order ID is required', async () => {
+      const req = { user: { id: '1' } }
+
+      await expect(controller.deleteOrder('', req)).rejects.toHaveProperty('statusCode', 400);
+      await expect(controller.deleteOrder('', req)).rejects.toHaveProperty('message', 'ID is required and must be provided.');
     });
 
-  });
+    test('Order ID is exists', async () => {
+      const req = { user: { id: '1' } }
+
+      await expect(controller.deleteOrder('IDNotExists', req)).rejects.toHaveProperty('statusCode', 404);
+      await expect(controller.deleteOrder('IDNotExists', req)).rejects.toHaveProperty('message', 'Order not found.');
+    });
+
+    test('Order does not belong to the user', async () => {
+      const req = { user: { id: 'IDUser' } }
+
+      await expect(controller.deleteOrder('1', req)).rejects.toHaveProperty('statusCode', 401);
+      await expect(controller.deleteOrder('1', req)).rejects.toHaveProperty('message', 'You do not have permission to access this order.');
+    });
+
+    test('Order has already been executed', async () => {
+      const req = { user: { id: '1' } }
+
+      await expect(controller.deleteOrder('2', req)).rejects.toHaveProperty('statusCode', 401);
+      await expect(controller.deleteOrder('2', req)).rejects.toHaveProperty('message', 'Order has already been executed.');
+    });
+
+    test('Success.', async () => {
+      const req = { user: { id: '1' } }
+
+      const order = await controller.deleteOrder('1', req);
+
+      await expect(order.status).toEqual(OrderStatus.CANCELED)
+    });
+  })
 
 });
