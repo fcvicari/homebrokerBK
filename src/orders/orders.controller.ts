@@ -81,6 +81,35 @@ export class OrdersController {
     return newOrder
   }
 
+  @ApiOperation({ summary: 'Cancel order' })
+  @ApiResponse({
+    status: 201,
+    description: 'Order successfully created.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'ID is required and must be provided.',
+    example: {
+      statusCode: 400,
+      message: 'ID is required and must be provided.',
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'You do not have permission to access this order or order has already been executed.',
+    example: {
+      statusCode: 401,
+      message: 'You do not have permission to access this order.',
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Order not found.',
+    example: {
+      statusCode: 404,
+      message: 'Order not found.',
+    },
+  })
   @Delete(':id')
   async deleteOrder(@Param('id') id: string, @Request() req) {
     if (!id) {

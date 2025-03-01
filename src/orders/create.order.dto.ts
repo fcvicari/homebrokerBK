@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+import { IsDateString, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 export class CreateOrderDTO {
   @ApiProperty({
@@ -14,7 +14,7 @@ export class CreateOrderDTO {
     description: 'Wallet ID',
     example: 'cuid-wallet-123'
   })
-  @IsUUID()
+  @IsString()
   walletID: string;
 
   @ApiProperty({

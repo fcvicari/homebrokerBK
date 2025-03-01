@@ -39,7 +39,7 @@ describe('WalletAssetController Tests', () => {
 
     const request = {
       user: {
-        Id: '1',
+        id: '1',
       },
     }
 
@@ -63,7 +63,7 @@ describe('WalletAssetController Tests', () => {
 
     const request = {
       user: {
-        Id: 'UserNotFound',
+        id: 'UserNotFound',
       },
     }
 
@@ -87,7 +87,7 @@ describe('WalletAssetController Tests', () => {
 
     const request = {
       user: {
-        Id: '1',
+        id: '1',
       },
     }
 
@@ -109,7 +109,7 @@ describe('WalletAssetController Tests', () => {
 
     const request = {
       user: {
-        Id: '1',
+        id: '1',
       },
     }
 

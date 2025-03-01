@@ -34,7 +34,7 @@ export class WalletController {
       dividends: 0,
       user: {
         connect: {
-          id: req.user.Id,
+          id: req.user.id,
         },
       },
     });
@@ -54,7 +54,7 @@ export class WalletController {
   @Get()
   async getWallets(@Request() req) {
 
-    const wallets = await this.wallet.getWalletsByUser(req.user.Id);
+    const wallets = await this.wallet.getWalletsByUser(req.user.id);
 
     return wallets;
   }
@@ -96,7 +96,7 @@ export class WalletController {
       throw new AppError('Wallet not found.', 404);
     }
 
-    if (wallet.userID !== req.user.Id) {
+    if (wallet.userID !== req.user.id) {
       throw new AppError('You do not have permission to access this wallet.', 401);
     }
 

@@ -33,7 +33,7 @@ describe('WalletController Tests', () => {
       },
       {
         user: {
-          Id: '1',
+          id: '1',
         },
       },
     )
@@ -44,7 +44,7 @@ describe('WalletController Tests', () => {
   it('Should retrieve wallets for a given user with no data', async () => {
     const wallets = await walletController.getWallets({
       user: {
-        Id: 'idUserNotExists',
+        id: 'idUserNotExists',
       },
     });
 
@@ -54,7 +54,7 @@ describe('WalletController Tests', () => {
   it('Should retrieve all wallets for a given user', async () => {
     const wallets = await walletController.getWallets({
       user: {
-        Id: '1',
+        id: '1',
       },
     });
 
@@ -67,17 +67,17 @@ describe('WalletController Tests', () => {
 
   it('Delete wallet - id does not exist', async () => {
     await expect(
-      walletController.delete('idNotExists', { user: { Id: 'IdUserNotExists' } }),
+      walletController.delete('idNotExists', { user: { id: 'IdUserNotExists' } }),
     ).rejects.toHaveProperty('statusCode', 404);
   });
 
   it('Delete wallet - wallet exists but does not belong to the user', async () => {
     await expect(
-      walletController.delete('1', { user: { Id: 'IdUserNotExists' } }),
+      walletController.delete('1', { user: { id: 'IdUserNotExists' } }),
     ).rejects.toHaveProperty('statusCode', 401);
   });
 
   it('Delete wallet - success', async () => {
-    expect(await walletController.delete('1', { user: { Id: '1' } })).toEqual(true);
+    expect(await walletController.delete('1', { user: { id: '1' } })).toEqual(true);
   });
 });

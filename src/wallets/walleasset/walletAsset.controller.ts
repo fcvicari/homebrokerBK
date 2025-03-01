@@ -39,7 +39,7 @@ export class WalletAssetController {
       throw new AppError('Wallet not found.', 401);
     }
 
-    if (walletUser.userID !== req.user.Id) {
+    if (walletUser.userID !== req.user.id) {
       throw new AppError('You do not have permission to access this wallet.', 401);
     }
 
