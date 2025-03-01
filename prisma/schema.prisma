@@ -38,32 +38,49 @@ model UsersToken {
 }
 
 model Wallet {
-  id        String   @id @default(cuid())
-  name      String
-  user      Users    @relation(fields: [userID], references: [id])
-  userID    String
+  id          String        @id @default(cuid())
+  name        String
+  user        Users         @relation(fields: [userID], references: [id])
+  userID      String
   /// Current total balance
-  balance   Float    @default(0)
+  balance     Float         @default(0)
   /// Total amount invested
-  amount    Float    @default(0)
+  amount      Float         @default(0)
   /// Total amount of dividends received
   dividends Float    @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Order     Order[]
+  WalletAsset WalletAsset[]
 }
 
 model Assets {
+  id          String        @id @default(cuid())
+  name        String
+  symbol      String
+  image       String?
+  price       Float         @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  WalletAsset WalletAsset[]
+
+  @@unique([symbol])
+}
+
+model WalletAsset {
   id        String   @id @default(cuid())
-  name      String
-  symbol    String
-  image     String?
-  price     Float    @default(0)
+  wallet    Wallet   @relation(fields: [walletID], references: [id])
+  walletID  String
+  asset     Assets   @relation(fields: [assetID], references: [id])
+  assetID   String
+  quantity  Float    @default(0)
+  avgPrice  Float    @default(0)
+  amount    Float    @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Order     Order[]
 
-  @@unique([symbol])
+  @@unique([walletID, assetID])
 }
 
 model Order {
