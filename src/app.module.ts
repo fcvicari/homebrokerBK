@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { AssetsModule } from '@src/assets/assets.module';
 import { PrismaService } from '@src/database/prisma.service';
+import { OrdersModule } from '@src/orders/orders.module';
 import { UsersModule } from '@src/users/users.module';
 import { WalletsModule } from '@src/wallets/wallets.module';
-import { AssetsModule } from './assets/assets.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { AssetsModule } from './assets/assets.module';
     }),
     UsersModule,
     WalletsModule,
-    AssetsModule
+    AssetsModule,
+    OrdersModule
   ],
   providers: [PrismaService]
 })
