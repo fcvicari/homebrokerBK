@@ -47,10 +47,10 @@ model Wallet {
   /// Total amount invested
   amount      Float         @default(0)
   /// Total amount of dividends received
-  dividends Float    @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Order     Order[]
+  dividends   Float         @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Order       Order[]
   WalletAsset WalletAsset[]
 }
 
@@ -63,6 +63,7 @@ model Assets {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   WalletAsset WalletAsset[]
+  Order       Order[]
 
   @@unique([symbol])
 }
@@ -78,7 +79,6 @@ model WalletAsset {
   amount    Float    @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Order     Order[]
 
   @@unique([walletID, assetID])
 }
