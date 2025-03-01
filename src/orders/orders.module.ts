@@ -4,6 +4,8 @@ import { AssetRepository } from '@src/assets/asset/asset.repository';
 import { PrismaService } from '@src/database/prisma.service';
 import { UserRepository } from '@src/users/user/user.repository';
 import { WalletRepository } from '@src/wallets/wallet/wallet.repository';
+import { OrdersController } from './orders.controller';
+import { OrderRepository } from './orders.repository';
 
 @Module({
   imports: [
@@ -12,8 +14,8 @@ import { WalletRepository } from '@src/wallets/wallet/wallet.repository';
       signOptions: { expiresIn: '12h' },
     }),
   ],
-  controllers: [],
-  providers: [PrismaService, UserRepository, AssetRepository, WalletRepository],
+  controllers: [OrdersController],
+  providers: [PrismaService, UserRepository, AssetRepository, WalletRepository, OrderRepository],
 })
 
 export class OrdersModule { }
