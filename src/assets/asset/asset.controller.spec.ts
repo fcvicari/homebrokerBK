@@ -41,6 +41,12 @@ describe('AssetController Tests', () => {
     expect(asset.price).toEqual(newAsset.price);
   });
 
+  it('Get all asset', async () => {
+    const asset = await assetController.getAll()
+
+    expect(asset?.length).toBeGreaterThan(0);
+  });
+
   it('Update asset - success', async () => {
     const newAsset = {
       name: 'New Asset Name',

@@ -90,6 +90,9 @@ export const assetRepositoryMock = {
       return Promise.resolve(asset);
     }),
     delete: jest.fn().mockResolvedValue(true),
+    getAllAssets: jest.fn().mockImplementation(() => {
+      return assetMock;
+    }),
     getAssetsBySymbol: jest.fn().mockImplementation((symbol: string) => {
       if (!symbol) {
         return Promise.resolve(null);
