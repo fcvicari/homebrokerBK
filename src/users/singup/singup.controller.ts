@@ -19,17 +19,22 @@ export class SingupController {
     private userToken: UserTokenRepository,
   ) { }
 
-  @ApiOperation({ summary: 'Creates a new user account', description: 'Creates a new user account with an inactive status and generates an activation token.' })
+  @ApiOperation({
+    summary: 'Creates a new user account',
+    description: 'Creates a new user account with an inactive status and generates an activation token.'
+  })
   @ApiResponse({
-    status: 201, description: 'User created successfully.', example: {
-      id: "cm7jt1aqo0000vllsz5mdp9c0",
+    status: 201,
+    description: 'User created successfully.',
+    example: {
+      id: "cuid-user-456",
       name: "John Doe",
       email: "johndoe@example.com",
       avatar: "https://example.com/avatar.jpg",
       active: false,
       createdAt: "2025-02-25T01:25:13.248Z",
       updatedAt: "2025-02-25T01:25:13.248Z",
-      activeToken: "cm7jt1b280001vllsgernk65f",
+      activeToken: "active-token",
     }
   })
   @ApiResponse({ status: 400, description: 'This email is already used by another user.' })
@@ -67,10 +72,15 @@ export class SingupController {
     summary: 'Activate a user account',
     description: 'This API endpoint is used to activate a user account using an activation token. It validates the token, checks its expiration (valid for 2 hours), activates the user account if valid, and removes all related activation tokens after successful activation.'
   })
-  @ApiQuery({ name: 'token', required: true })
+  @ApiQuery({
+    name: 'token',
+    required: true
+  })
   @ApiResponse({
-    status: 201, description: 'User activate successfully.', example: {
-      id: "cm7jt1aqo0000vllsz5mdp9c0",
+    status: 201,
+    description: 'User activate successfully.',
+    example: {
+      id: "cuid-user-456",
       name: "John Doe",
       email: "johndoe@example.com",
       avatar: "https://example.com/avatar.jpg",
@@ -79,7 +89,10 @@ export class SingupController {
       updatedAt: "2025-02-25T01:25:13.248Z",
     }
   })
-  @ApiResponse({ status: 400, description: 'Token expired.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Token expired.'
+  })
   @Post('activate')
   async postActivateUser(@Query() query) {
     const { token } = query;
@@ -108,8 +121,10 @@ export class SingupController {
   })
   @ApiQuery({ name: 'token', required: true })
   @ApiResponse({
-    status: 201, description: 'User activate successfully.', example: {
-      id: "cm7jt1aqo0000vllsz5mdp9c0",
+    status: 201,
+    description: 'User activate successfully.',
+    example: {
+      id: "cuid-user-456",
       name: "John Doe",
       email: "johndoe@example.com",
       avatar: "https://example.com/avatar.jpg",
@@ -150,7 +165,7 @@ export class SingupController {
   })
   @ApiResponse({
     status: 201, description: 'Token alter password send.', example: {
-      token: "cm7jt1aqo0000vllsz5mdp9c0",
+      token: "active-token",
     }
   })
   @Post('recoverpass')

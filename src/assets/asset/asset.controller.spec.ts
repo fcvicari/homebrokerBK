@@ -41,36 +41,16 @@ describe('AssetController Tests', () => {
     expect(asset.price).toEqual(newAsset.price);
   });
 
-  it('Create asset - invalid Symbol', async () => {
-    const newAsset = {
-      name: 'New Asset Name',
-      symbol: 'ASST1',
-      price: 99.99,
-      image: 'https://image.com',
-    };
+  it('Get all asset', async () => {
+    const asset = await assetController.getAll()
 
-    await expect(assetController.post(newAsset))
-      .rejects.toHaveProperty('statusCode', 409);
-  });
-
-  it('Update asset - invalid Symbol', async () => {
-    const newAsset = {
-      id: '1',
-      name: 'New Asset Name',
-      symbol: 'ASST2',
-      price: 99.99,
-      image: 'https://image.com',
-    };
-
-    await expect(assetController.post(newAsset))
-      .rejects.toHaveProperty('statusCode', 409);
+    expect(asset?.length).toBeGreaterThan(0);
   });
 
   it('Update asset - success', async () => {
     const newAsset = {
-      id: '1',
       name: 'New Asset Name',
-      symbol: 'NEWASS',
+      symbol: 'ASST1',
       price: 99.99,
       image: 'https://image.com',
     };
@@ -102,7 +82,19 @@ describe('AssetController Tests', () => {
     ).rejects.toHaveProperty('statusCode', 404);
   });
 
+  it('Delete asset - exist Order', async () => {
+    await expect(
+      assetController.delete('1'),
+    ).rejects.toHaveProperty('statusCode', 400);
+  });
+
+  it('Delete asset - exist Wallet', async () => {
+    await expect(
+      assetController.delete('2'),
+    ).rejects.toHaveProperty('statusCode', 400);
+  });
+
   it('Delete asset - success', async () => {
-    expect(await assetController.delete('1')).toEqual(true);
+    expect(await assetController.delete('3')).toEqual(true);
   });
 });

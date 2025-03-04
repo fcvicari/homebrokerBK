@@ -12,6 +12,17 @@ export class WalletAssetRepository {
     });
   }
 
+  async findAssetWallet(walletID: string, assetID: string): Promise<WalletAsset | null> {
+    return await this.prisma.walletAsset.findUnique({
+      where: {
+        walletID_assetID: {
+          walletID,
+          assetID
+        }
+      },
+    });
+  }
+
   async update(id: string, data: Prisma.WalletAssetUpdateInput): Promise<WalletAsset> {
     return await this.prisma.walletAsset.update({
       data,

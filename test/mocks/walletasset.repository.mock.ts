@@ -53,6 +53,13 @@ export const walletassetRepositoryMock = {
           updatedAt: new Date()
         });
       }),
+    findAssetWallet: jest
+      .fn()
+      .mockImplementation((walletID: string, assetID: string) => {
+        const wallet = assetMock.find(asset => asset.assetID === assetID && asset.walletID === walletID)
+
+        return wallet
+      }),
     update: jest
       .fn()
       .mockImplementation((id: string, data: Prisma.WalletAssetUpdateInput = {}) => {

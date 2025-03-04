@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@src/auth/auth.guard';
 import { AppError } from '@src/utils/app.erro';
 import { WalletDTO } from './wallet.Dto';
@@ -14,10 +14,22 @@ export class WalletController {
     private wallet: WalletRepository,
   ) { }
 
+  @ApiOperation({ summary: 'Create wallet' })
   @ApiResponse({
     status: 201,
     description: 'Wallet created successfully.',
-    type: WalletDTO,
+    schema: {
+      example: {
+        id: "cuid-wallet-123",
+        name: "My wallet",
+        userID: "cuid-user-456",
+        balance: 0,
+        amount: 0,
+        dividends: 0,
+        createdAt: "2025-03-03T22:08:36.915Z",
+        updatedAt: "2025-03-03T22:08:36.915Z"
+      },
+    },
   })
   @ApiResponse({
     status: 400,
@@ -42,10 +54,22 @@ export class WalletController {
     return { ...wallet };
   }
 
+  @ApiOperation({ summary: 'Get all wallet to the user' })
   @ApiResponse({
     status: 200,
     description: 'List of wallets for the authenticated user.',
-    type: [WalletDTO],
+    schema: {
+      example: [{
+        id: "cuid-wallet-123",
+        name: "My wallet",
+        userID: "cuid-user-456",
+        balance: 0,
+        amount: 0,
+        dividends: 0,
+        createdAt: "2025-03-03T22:08:36.915Z",
+        updatedAt: "2025-03-03T22:08:36.915Z"
+      }],
+    },
   })
   @ApiResponse({
     status: 400,
@@ -59,6 +83,8 @@ export class WalletController {
     return wallets;
   }
 
+
+  @ApiOperation({ summary: 'Delete wallet' })
   @ApiResponse({
     status: 200,
     description: 'Wallet deleted successfully.',

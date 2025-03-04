@@ -56,6 +56,11 @@ describe('AssetRepository Tests', () => {
 
           return Promise.resolve(asset);
         }),
+      findMany: jest
+        .fn()
+        .mockImplementation(() => {
+          return assetMock;
+        }),
       delete: jest.fn(),
       update: jest
         .fn()
@@ -108,6 +113,12 @@ describe('AssetRepository Tests', () => {
     expect(newAsset.id).not.toBeNull();
     expect(newAsset.id).toEqual('idNewAsset');
     expect(newAsset.price).toEqual(1);
+  });
+
+  it('return all Assets', async () => {
+    const assets = await assetRepository.getAllAssets();
+
+    expect(assets?.length).toBeGreaterThan(0);
   });
 
   it('Update asset', async () => {
