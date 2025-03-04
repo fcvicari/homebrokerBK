@@ -8,6 +8,14 @@ export const assetMock = [
     symbol: 'ASST1',
     image: 'https://image.com',
     price: 1.45,
+    Order: [
+      {
+        id: 'Ord1'
+      },
+      {
+        id: 'Ord2'
+      }
+    ],
     createdAt: new Date(),
     updatedAt: new Date(),
   },
@@ -17,6 +25,14 @@ export const assetMock = [
     symbol: 'ASST2',
     image: 'https://image.com',
     price: 5.55,
+    WalletAsset: [
+      {
+        id: 'WalletAsset1'
+      },
+      {
+        id: 'WalletAsset2'
+      }
+    ],
     createdAt: new Date(),
     updatedAt: new Date(),
   },

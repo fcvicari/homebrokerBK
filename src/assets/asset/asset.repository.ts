@@ -27,11 +27,19 @@ export class AssetRepository {
     });
   }
 
-  async getUniqueById(id: string): Promise<Assets | null> {
+  async getAllAssets(): Promise<Assets[] | null> {
+    return await this.prisma.assets.findMany();
+  }
+
+  async getUniqueById(id: string) {
     return await this.prisma.assets.findUnique({
       where: {
         id
-      }
+      },
+      include: {
+        WalletAsset: true,
+        Order: true,
+      },
     });
   }
 
@@ -41,6 +49,8 @@ export class AssetRepository {
         id
       }
     });
+
+    return null;
   }
 
   async getAssetsBySymbol(symbol: string): Promise<Assets | null> {

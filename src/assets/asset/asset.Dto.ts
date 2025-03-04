@@ -1,17 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min } from 'class-validator';
 
 export class AssetsDTO {
-  @ApiProperty({
-    description: 'Unique identifier of the asset',
-    type: String,
-    required: false,
-    example: null,
-  })
-  @IsOptional()
-  @IsString()
-  id?: string;
-
   @ApiProperty({
     description: 'The name of the asset',
     type: String,
@@ -51,24 +41,4 @@ export class AssetsDTO {
   @IsNumber()
   @Min(0)
   price?: number;
-
-  @ApiProperty({
-    description: 'The date and time when the asset was created',
-    type: String,
-    required: false,
-    example: '2023-02-25T14:30:00.000Z',
-  })
-  @IsOptional()
-  @IsDateString()
-  createdAt?: string;
-
-  @ApiProperty({
-    description: 'The date and time when the asset was last updated',
-    type: String,
-    required: false,
-    example: '2023-02-25T14:30:00.000Z',
-  })
-  @IsOptional()
-  @IsDateString()
-  updatedAt?: string;
 }

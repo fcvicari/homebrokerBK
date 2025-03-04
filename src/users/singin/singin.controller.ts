@@ -21,14 +21,17 @@ export class SingInController {
     private jwtService: JwtService,
   ) { }
 
-  @ApiOperation({ summary: 'User Sign-In', description: 'Authenticate user and return JWT token.' })
+  @ApiOperation({
+    summary: 'User Sign-In',
+    description: 'Authenticate user and return JWT token.'
+  })
   @ApiBody({ type: SingInDTO })
   @ApiResponse({
     status: 201,
     description: 'User authenticated successfully.',
     schema: {
       example: {
-        id: '12345',
+        id: 'cuid-user-456',
         name: 'John Doe',
         email: 'johndoe@example.com',
         accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',

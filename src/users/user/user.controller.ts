@@ -23,14 +23,21 @@ export class UserController {
   ) { }
 
   @ApiBearerAuth('jwt')
-  @ApiParam({ name: 'id', type: String, description: 'Unique user identifier' })
-  @ApiOperation({ summary: 'Update User Profile', description: 'Allow users to update their profile information such as email, name, and avatar.' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'Unique user identifier'
+  })
+  @ApiOperation({
+    summary: 'Update User Profile',
+    description: 'Allow users to update their profile information such as email, name, and avatar.'
+  })
   @ApiResponse({
     status: 200,
     description: 'User updated successfully.',
     schema: {
       example: {
-        id: '12345',
+        id: 'cuid-user-456',
         name: 'John Doe',
         email: 'newemail@example.com',
         avatar: 'https://new-avatar-url.com/avatar.png',
@@ -88,14 +95,21 @@ export class UserController {
   }
 
   @ApiBearerAuth('jwt')
-  @ApiOperation({ summary: 'Change User Password', description: 'Allow users to change their password by providing the current and new password.' })
-  @ApiParam({ name: 'id', type: String, description: 'Unique user identifier' })
+  @ApiOperation({
+    summary: 'Change User Password',
+    description: 'Allow users to change their password by providing the current and new password.'
+  })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'Unique user identifier'
+  })
   @ApiResponse({
     status: 200,
     description: 'Password Changed Successfully',
     schema: {
       example: {
-        id: "12345",
+        id: "cuid-user-456",
         name: "John Doe",
         email: "johndoe@example.com",
         updatedAt: "2025-02-25T15:30:00.000Z"
