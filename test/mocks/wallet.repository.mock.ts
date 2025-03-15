@@ -4,7 +4,7 @@ import { WalletRepository } from "@src/wallets/wallet/wallet.repository";
 export const walletMock = [
   {
     id: '1',
-    name: 'Carteira 1',
+    name: 'Wallet 1',
     balance: 0,
     amount: 0,
     dividends: 0,
@@ -14,7 +14,7 @@ export const walletMock = [
   },
   {
     id: '2',
-    name: 'Carteira 2',
+    name: 'Wallet 2',
     balance: 0,
     amount: 0,
     dividends: 0,
@@ -24,7 +24,7 @@ export const walletMock = [
   },
   {
     id: '3',
-    name: 'Carteira 1',
+    name: 'Wallet 3',
     balance: 0,
     amount: 0,
     dividends: 0,
