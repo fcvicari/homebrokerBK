@@ -84,6 +84,54 @@ export class WalletController {
   }
 
 
+  @ApiOperation({ summary: 'Get a specific wallet' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get a specific wallet for the authenticated user.',
+    schema: {
+      example: {
+        id: "cuid-wallet-123",
+        name: "My wallet",
+        userID: "cuid-user-456",
+        balance: 0,
+        amount: 0,
+        dividends: 0,
+        createdAt: "2025-03-03T22:08:36.915Z",
+        updatedAt: "2025-03-03T22:08:36.915Z"
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Wallet not found.',
+    example: {
+      statusCode: 404,
+      message: 'Wallet not found.'
+    }
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'You do not have permission to access this wallet.',
+    example: {
+      statusCode: 401,
+      message: 'You do not have permission to access this wallet.'
+    }
+  })
+  @Get(':id')
+  async getWallet(@Param('id') id: string, @Request() req) {
+    const wallet = await this.wallet.getUniqueById({ id });
+    if (!wallet) {
+      throw new AppError('Wallet not found.', 404);
+    }
+
+    if (wallet.userID !== req.user.id) {
+      throw new AppError('You do not have permission to access this wallet.', 401);
+    }
+
+    return wallet;
+  }
+
+
   @ApiOperation({ summary: 'Delete wallet' })
   @ApiResponse({
     status: 200,
