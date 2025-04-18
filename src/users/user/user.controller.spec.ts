@@ -3,6 +3,7 @@ import { jwtServiceMock } from '../../../test/mocks/jwtService.mock';
 import { passwordHashMock } from '../../../test/mocks/password.hash.mock';
 import { userRepositoryMock } from '../../../test/mocks/user.repository.mock';
 import { userTokenRepositoryMock } from '../../../test/mocks/userToken.repository.mock';
+import { walletRepositoryMock } from '../../../test/mocks/wallet.repository.mock';
 import { UserController } from './user.controller';
 
 describe('UserController Tests', () => {
@@ -15,6 +16,7 @@ describe('UserController Tests', () => {
         passwordHashMock,
         userRepositoryMock,
         userTokenRepositoryMock,
+        walletRepositoryMock,
         jwtServiceMock,
       ],
     }).compile();
@@ -74,6 +76,57 @@ describe('UserController Tests', () => {
     expect(updateUser?.email).toEqual(body.email);
   });
 
+
+  it('activeWallet - not exists user', async () => {
+    const body = {
+      walletID: 'idWalletNotExists',
+    }
+
+    await expect(
+      userController.activeWallet(body, { user: { id: 'IdUserNotExists' } }),
+    ).rejects.toHaveProperty('statusCode', 400);
+  });
+  
+  it('activeWallet - user not active', async () => {
+    const body = {
+      walletID: 'idWalletNotExists',
+    }
+
+    await expect(
+      userController.activeWallet(body, { user: { id: '2' } }),
+    ).rejects.toHaveProperty('statusCode', 401);
+  });
+
+  it('activeWallet - not exists wallet', async () => {
+    const body = {
+      walletID: 'idWalletNotExists',
+    }
+
+    await expect(
+      userController.activeWallet(body, { user: { id: '1' } }),
+    ).rejects.toHaveProperty('statusCode', 400);
+  });
+
+  it('activeWallet - wallet does not belong to the user', async () => {
+    const body = {
+      walletID: '3',
+    }
+
+    await expect(
+      userController.activeWallet(body, { user: { id: '1' } }),
+    ).rejects.toHaveProperty('statusCode', 400);
+  });
+
+  it('activeWallet - success', async () => {
+    const body = {
+      walletID: '1',
+    }
+
+    const activeWallet = await userController.activeWallet(body, { user: { id: '1' } })
+
+    expect(activeWallet.activeWalletId).toEqual(body.walletID);
+  });
+ 
   it('Change password user - user does not exist', async () => {
     const body = {
       password: '12345',

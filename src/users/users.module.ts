@@ -5,6 +5,7 @@ import { UserController } from '@src/users/user/user.controller';
 import { UserRepository } from '@src/users/user/user.repository';
 import { UserTokenRepository } from '@src/users/usertoken/userToken.repository';
 import { PasswordHash } from '@src/utils/password.hash';
+import { WalletRepository } from '@src/wallets/wallet/wallet.repository';
 import { SingInController } from './singin/singin.controller';
 import { SingupController } from './singup/singup.controller';
 
@@ -16,7 +17,7 @@ import { SingupController } from './singup/singup.controller';
     }),
   ],
   controllers: [UserController, SingInController, SingupController],
-  providers: [PasswordHash, PrismaService, UserRepository, UserTokenRepository],
+  providers: [PasswordHash, PrismaService, UserRepository, UserTokenRepository, WalletRepository],
 })
 
 export class UsersModule { }
