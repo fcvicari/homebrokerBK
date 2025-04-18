@@ -7,7 +7,7 @@ describe('UserRepository Tests', () => {
   let prismaService: PrismaService;
 
   const mockPrismaService = {
-    users: {
+    user: {
       create: jest
         .fn()
         .mockImplementation(({ name, email, password, avatar }) => {
@@ -66,7 +66,7 @@ describe('UserRepository Tests', () => {
       active: true,
     };
 
-    mockPrismaService.users.update.mockResolvedValue(userData);
+    mockPrismaService.user.update.mockResolvedValue(userData);
 
     const user = await userRepository.activateUser('userID');
 
@@ -83,7 +83,7 @@ describe('UserRepository Tests', () => {
       active: true,
     };
 
-    mockPrismaService.users.findUnique.mockResolvedValue(userData);
+    mockPrismaService.user.findUnique.mockResolvedValue(userData);
 
     const user = await userRepository.getUniqueById({ id: 'userID' });
 
@@ -99,7 +99,7 @@ describe('UserRepository Tests', () => {
       active: true,
     };
 
-    mockPrismaService.users.findUnique.mockResolvedValue(userData);
+    mockPrismaService.user.findUnique.mockResolvedValue(userData);
 
     const user = await userRepository.findByEmail({
       email: 'jonhdoe@jonhdoe.com',
@@ -117,7 +117,7 @@ describe('UserRepository Tests', () => {
       active: true,
     };
 
-    mockPrismaService.users.update.mockResolvedValue(userData);
+    mockPrismaService.user.update.mockResolvedValue(userData);
 
     const user = await userRepository.alterPassword('userID', 'jonhdoe1234');
 
@@ -133,7 +133,7 @@ describe('UserRepository Tests', () => {
       active: true,
     };
 
-    mockPrismaService.users.update.mockResolvedValue(userData);
+    mockPrismaService.user.update.mockResolvedValue(userData);
 
     const user = await userRepository.update({
       data: { ...userData },
@@ -144,11 +144,11 @@ describe('UserRepository Tests', () => {
   });
 
   it('Delete user', async () => {
-    mockPrismaService.users.delete.mockResolvedValue(null);
+    mockPrismaService.user.delete.mockResolvedValue(null);
 
     await userRepository.delete({ id: 'userID' });
 
-    expect(prismaService.users.delete).toHaveBeenCalledWith({
+    expect(prismaService.user.delete).toHaveBeenCalledWith({
       where: { id: 'userID' },
     });
   });

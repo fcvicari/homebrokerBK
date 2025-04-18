@@ -1,4 +1,4 @@
-import { Users } from '@prisma/client';
+import { User } from '@prisma/client';
 import { UserRepository } from '@src/users/user/user.repository';
 
 export const userMock = [
@@ -22,7 +22,7 @@ export const userMock = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
-] as Users[];
+] as User[];
 
 export const userRepositoryMock = {
   provide: UserRepository,
