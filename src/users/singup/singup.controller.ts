@@ -8,7 +8,7 @@ import { PasswordHash } from '@src/utils/password.hash';
 import { differenceInHours } from 'date-fns';
 import { AlterPasswordDTO, RecoveryPasswordDTO } from './singup.Dto';
 
-@ApiTags('Users')
+@ApiTags('User')
 @Controller()
 export class SingupController {
   constructor(
@@ -58,7 +58,7 @@ export class SingupController {
     });
 
     const token = await this.userToken.create({
-      user: { connect: userCreated },
+      user: { connect: { id: userCreated.id } },
     });
 
     return {
@@ -180,7 +180,7 @@ export class SingupController {
 
       const userToken = await this.userToken.create({
         user: {
-          connect: userExists,
+          connect: { id: userExists.id },
         },
       });
 

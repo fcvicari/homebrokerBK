@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Param, Patch, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Put, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@src/auth/auth.guard';
 import { AppError } from '@src/utils/app.erro';
 import { PasswordHash } from '@src/utils/password.hash';
+import { WalletRepository } from '@src/wallets/wallet/wallet.repository';
+import { ActiveWalletDTO } from './activeWallet.Dto';
 import { UserPasswordDTO } from './user.password.Dto';
 import { UserRepository } from './user.repository';
 import { UserDataDTO } from './userData.Dto';
@@ -18,6 +20,8 @@ const ChangePassword =
 export class UserController {
   constructor(
     private user: UserRepository,
+
+    private wallet: WalletRepository,
 
     private hash: PasswordHash,
   ) { }
@@ -86,6 +90,71 @@ export class UserController {
     const userUpdated = await this.user.update({
       where: { id },
       data: userExists,
+    });
+
+    return {
+      ...userUpdated,
+      password: undefined,
+    };
+  }
+
+  @ApiBearerAuth('jwt')
+  @ApiOperation({
+    summary: 'Activate wallet.',
+    description: 'Activate the wallet for the user.'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Active wallet successfully.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'User not found.',
+    schema: {
+      example: {
+        statusCode: 400,
+        message: 'User not found.',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'User inactive.',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'User inactive.',
+      },
+    },
+  })
+  @Patch('/activeWallet')
+  async activeWallet(@Body() body: ActiveWalletDTO, @Request() req) {
+    const { walletID } = body;
+
+    let userExists = await this.user.getUniqueById({ id: req.user.id });
+    if (!userExists) {
+      throw new AppError(UserNotFound, 400);
+    }
+
+    if (!userExists.active) {
+      throw new AppError(UserInactive, 401);
+    }
+
+    const wallet = await this.wallet.getUniqueById({ id: walletID });
+    if (!wallet) {
+      throw new AppError('Wallet not found.', 400);
+    }
+
+    if (wallet.userID !== req.user.id) {
+      throw new AppError('This wallet does not belong to you.', 400);
+    }
+
+    const userUpdated = await this.user.update({
+      where: { id: req.user.id },
+      data: {
+        activeWallet: {connect: { id: walletID }},
+        updatedAt: new Date(),
+      },
     });
 
     return {
