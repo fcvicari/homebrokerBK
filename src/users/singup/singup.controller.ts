@@ -8,7 +8,7 @@ import { PasswordHash } from '@src/utils/password.hash';
 import { differenceInHours } from 'date-fns';
 import { AlterPasswordDTO, RecoveryPasswordDTO } from './singup.Dto';
 
-@ApiTags('Users')
+@ApiTags('User')
 @Controller()
 export class SingupController {
   constructor(
