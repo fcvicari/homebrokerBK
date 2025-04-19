@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@src/auth/auth.guard';
+import { UserRepository } from '@src/users/user/user.repository';
 import { AppError } from '@src/utils/app.erro';
 import { WalletDTO } from './wallet.Dto';
 import { WalletRepository } from './wallet.repository';
@@ -12,6 +13,8 @@ import { WalletRepository } from './wallet.repository';
 export class WalletController {
   constructor(
     private wallet: WalletRepository,
+
+    private user: UserRepository,
   ) { }
 
   @ApiOperation({ summary: 'Create wallet' })
@@ -48,6 +51,14 @@ export class WalletController {
         connect: {
           id: req.user.id,
         },
+      },
+    });
+
+    await this.user.update({
+      where: { id: req.user.id },
+      data: {
+        activeWallet: {connect: { id: wallet.id }},
+        updatedAt: new Date(),
       },
     });
 
