@@ -127,7 +127,7 @@ export class UserController {
       },
     },
   })
-  @Patch('/activeWallet')
+  @Patch('/wallet/active')
   async activeWallet(@Body() body: ActiveWalletDTO, @Request() req) {
     const { walletID } = body;
 
