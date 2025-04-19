@@ -76,6 +76,7 @@ export class SingInController {
       id: user.id,
       name: user.name,
       email: user.email,
+      wallet: user.activeWalletId,
       accessToken: await this.jwtService.signAsync(payload),
     };
   }
